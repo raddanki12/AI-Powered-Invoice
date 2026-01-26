@@ -1,0 +1,58 @@
+{
+  "info": {
+    "name": "Cross LoB Invoice",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "SupplierInvoice",
+      "event": [],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "password",
+              "value": "7a1acb22-6f4c-4c23-95ad-5938cb4b1272$kiywDQfTceiPKnXAIX2EIve-HAev7jxNM_jfILSJzcw=",
+              "type": "string"
+            },
+            {
+              "key": "username",
+              "value": "sb-f60add7d-18fd-4901-9363-b0d44a55e2b7!b126731|it-rt-integration-suite-92lelxp5!b117912",
+              "type": "string"
+            }
+          ]
+        },
+        "description": "",
+        "url": {
+          "raw": "https://integration-suite-92lelxp5.it-cpi018-rt.cfapps.eu10-003.hana.ondemand.com/http/docs/trigger",
+          "protocol": "https",
+          "host": [
+            "integration-suite-92lelxp5",
+            "it-cpi018-rt",
+            "cfapps",
+            "eu10-003",
+            "hana",
+            "ondemand",
+            "com"
+          ],
+          "path": [
+            "http",
+            "docs",
+            "trigger"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        }
+      }
+    }
+  ],
+  "variable": []
+}
