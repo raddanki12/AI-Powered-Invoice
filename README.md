@@ -1,0 +1,1 @@
+Download all reference files to your local machine and execute the Discovery Mission by following the step-by-step instructions provided in each project board card, completing and validating each task before moving to the next.  
