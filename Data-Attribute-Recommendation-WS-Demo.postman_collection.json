@@ -1,0 +1,1077 @@
+{
+	"info": {
+		"_postman_id": "9d14ac36-f7d4-42ac-8825-ae638610ab29",
+		"name": "Data-Attribute-Recommendation-WS-Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43000878"
+	},
+	"item": [
+		{
+			"name": "Setup",
+			"item": [
+				{
+					"name": "000.Get Authorization",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"// The code below works for Postman Native app. If you are using Chrome app, use the next line",
+									"pm.environment.set(\"token\", jsonData.access_token); "
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "{{clientsecret}}",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "{{clientid}}",
+									"type": "string"
+								},
+								{
+									"key": "saveHelperData",
+									"type": "any"
+								},
+								{
+									"key": "showPassword",
+									"value": false,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{authentication_endpoint}}/oauth/token?grant_type=client_credentials",
+							"host": [
+								"{{authentication_endpoint}}"
+							],
+							"path": [
+								"oauth",
+								"token"
+							],
+							"query": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Upload Data",
+			"item": [
+				{
+					"name": "001.Get Dataset Schemas collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/data-manager/api/v3/datasetSchemas",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"data-manager",
+								"api",
+								"v3",
+								"datasetSchemas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "002.Create new Dataset Schema",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"// Get the id of the created dataset schema",
+									"pm.environment.set(\"dataset_schema_id\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"features\": [\n        {\n            \"label\": \"DeliveryDate\",\n            \"type\": \"number\"\n        },\n        {\n            \"label\": \"SalesOrganization\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"ShipToParty\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"SoldToParty\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"DeliveryDocumentType\",\n            \"type\": \"text\"\n        },\n        {\n            \"label\": \"CreationDate\",\n            \"type\": \"number\"\n        },\n        {\n            \"label\": \"ShippingPoint\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"DeliveryPriority\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"IncotermsClassification\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"TransactionCurrency\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"Material\",\n            \"type\": \"text\"\n        },\n        {\n            \"label\": \"DeliveryDocumentItemText\",\n            \"type\": \"text\"\n        },\n        {\n            \"label\": \"MaterialGroup\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"ActualDeliveryQuantity\",\n            \"type\": \"number\"\n        },\n        {\n            \"label\": \"DeliveryQuantityUnit\",\n            \"type\": \"text\"\n        },\n        {\n            \"label\": \"Plant\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"StorageLocation\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"ItemGrossWeight\",\n            \"type\": \"number\"\n        },\n        {\n            \"label\": \"ItemWeightUnit\",\n            \"type\": \"text\"\n        },\n        {\n            \"label\": \"ControllingArea\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"DistributionChannel\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"GoodsMovementType\",\n            \"type\": \"category\"\n        },\n        {\n            \"label\": \"ProfitCenter\",\n            \"type\": \"category\"\n        }\n    ],\n    \"labels\": [\n        {\n            \"label\": \"PartnerNumber\",\n            \"type\": \"category\"\n        }\n    ],\n    \"name\": \"sap-delivery-partner-classification-schema-1\"\n}"
+						},
+						"url": {
+							"raw": "{{hostname}}/data-manager/api/v3/datasetSchemas",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"data-manager",
+								"api",
+								"v3",
+								"datasetSchemas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "003.Get Dataset Schema by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/data-manager/api/v3/datasetSchemas/{{dataset_schema_id}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"data-manager",
+								"api",
+								"v3",
+								"datasetSchemas",
+								"{{dataset_schema_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "004.Get Datasets collection",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/data-manager/api/v3/datasets",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"data-manager",
+								"api",
+								"v3",
+								"datasets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "005.Create new Dataset",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"// Get the id of the created dataset schema",
+									"pm.environment.set(\"dataset_id\", jsonData.id); ",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"sap-delivery-partner-classification-dataset-1\",\n\t\"datasetSchemaId\": \"{{dataset_schema_id}}\"\n}"
+						},
+						"url": {
+							"raw": "{{hostname}}/data-manager/api/v3/datasets",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"data-manager",
+								"api",
+								"v3",
+								"datasets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "006.Upload data",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": "/C:/Users/I762096/OneDrive - SAP SE/Arun Maari Rajha/Asset Collection/Data attribute recommendation/sample_training_data_aug7th.csv"
+							}
+						},
+						"url": {
+							"raw": "{{hostname}}/data-manager/api/v3/datasets/{{dataset_id}}/data",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"data-manager",
+								"api",
+								"v3",
+								"datasets",
+								"{{dataset_id}}",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "007.Get Dataset by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/data-manager/api/v3/datasets/{{dataset_id}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"data-manager",
+								"api",
+								"v3",
+								"datasets",
+								"{{dataset_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Train Job",
+			"item": [
+				{
+					"name": "001.Get all Jobs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/model-manager/api/v3/jobs/",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"model-manager",
+								"api",
+								"v3",
+								"jobs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "002.Create new Job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"// Get modelId",
+									"pm.environment.set(\"job_id\", jsonData.id)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var random_name = \"model_\";",
+									"random_name += Math.random().toString().replace(\"0.\", \"\");",
+									"pm.environment.set(\"model_name\", random_name)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"datasetId\": \"{{dataset_id}}\",\n    \"modelTemplateId\": \"{{model_template_id}}\",\n    \"modelName\": \"{{model_name}}\"\n}"
+						},
+						"url": {
+							"raw": "{{hostname}}/model-manager/api/v3/jobs/",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"model-manager",
+								"api",
+								"v3",
+								"jobs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "003.Get Job by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/model-manager/api/v3/jobs/{{job_id}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"model-manager",
+								"api",
+								"v3",
+								"jobs",
+								"{{job_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "004.Get Model by name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/model-manager/api/v3/models/{{model_name}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"model-manager",
+								"api",
+								"v3",
+								"models",
+								"{{model_name}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "005.Get all Models",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/model-manager/api/v3/models/",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"model-manager",
+								"api",
+								"v3",
+								"models",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Deploy Model",
+			"item": [
+				{
+					"name": "001.Get all Deployments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/model-manager/api/v3/deployments/",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"model-manager",
+								"api",
+								"v3",
+								"deployments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "002.Deploy Model by name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the response",
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"// Get deploymentId",
+									"pm.environment.set(\"deployment_id\", jsonData.id)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"modelName\": \"{{model_name}}\"\n}"
+						},
+						"url": {
+							"raw": "{{hostname}}/model-manager/api/v3/deployments/",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"model-manager",
+								"api",
+								"v3",
+								"deployments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "003.Get Deployment by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/model-manager/api/v3/deployments/{{deployment_id}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"model-manager",
+								"api",
+								"v3",
+								"deployments",
+								"{{deployment_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Classify Records",
+			"item": [
+				{
+					"name": "001. Send inference request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"topN\": 1,\n    \"objects\": [\n        {\n            \"objectId\": \"44500f3d-6905-4c47-91f3-749b2ac73fe9\",\n            \"features\": [\n                {\n                    \"name\": \"DeliveryDate\",\n                    \"value\": \"6122025\"\n                },\n                {\n                    \"name\": \"SalesOrganization\",\n                    \"value\": \"1710\"\n                },\n                {\n                    \"name\": \"ShipToParty\",\n                    \"value\": \"17100001\"\n                },\n                {\n                    \"name\": \"SoldToParty\",\n                    \"value\": \"17100001\"\n                },\n                {\n                    \"name\": \"DeliveryDocumentType\",\n                    \"value\": \"LF\"\n                },\n                {\n                    \"name\": \"CreationDate\",\n                    \"value\": \"12072025\"\n                },\n                {\n                    \"name\": \"ShippingPoint\",\n                    \"value\": \"1710\"\n                },\n                {\n                    \"name\": \"DeliveryPriority\",\n                    \"value\": \"0\"\n                },\n                {\n                    \"name\": \"IncotermsClassification\",\n                    \"value\": \"DPD\"\n                },\n                {\n                    \"name\": \"TransactionCurrency\",\n                    \"value\": \"USD\"\n                },\n                {\n                    \"name\": \"Material\",\n                    \"value\": \"FG2_CP\"\n                },\n                {\n                    \"name\": \"DeliveryDocumentItemText\",\n                    \"value\": \"CP-FG2, Ink Bottled,15 ml\"\n                },\n                {\n                    \"name\": \"MaterialGroup\",\n                    \"value\": \"L004\"\n                },\n                {\n                    \"name\": \"ActualDeliveryQuantity\",\n                    \"value\": \"370\"\n                },\n                {\n                    \"name\": \"DeliveryQuantityUnit\",\n                    \"value\": \"BT\"\n                },\n                {\n                    \"name\": \"Plant\",\n                    \"value\": \"1710\"\n                },\n                {\n                    \"name\": \"StorageLocation\",\n                    \"value\": \"171A\"\n                },\n                {\n                    \"name\": \"ItemGrossWeight\",\n                    \"value\": \"2000\"\n                },\n                {\n                    \"name\": \"ItemWeightUnit\",\n                    \"value\": \"KG\"\n                },\n                {\n                    \"name\": \"ControllingArea\",\n                    \"value\": \"A000\"\n                },\n                {\n                    \"name\": \"DistributionChannel\",\n                    \"value\": \"10\"\n                },\n                {\n                    \"name\": \"GoodsMovementType\",\n                    \"value\": \"601\"\n                },\n                {\n                    \"name\": \"ProfitCenter\",\n                    \"value\": \"YB110\"\n                }\n            ]\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{hostname}}/inference/api/v3/models/{{model_name}}/versions/1",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"inference",
+								"api",
+								"v3",
+								"models",
+								"{{model_name}}",
+								"versions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Undeploy Model",
+			"item": [
+				{
+					"name": "001.Undeploy Model by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/model-manager/api/v3/deployments/{{deployment_id}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"model-manager",
+								"api",
+								"v3",
+								"deployments",
+								"{{deployment_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete Trained Model",
+			"item": [
+				{
+					"name": "001.Delete previously trained Model",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/model-manager/api/v3/models/{{model_name}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"model-manager",
+								"api",
+								"v3",
+								"models",
+								"{{model_name}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "002.Delete previously trained Job",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/model-manager/api/v3/jobs/{{job_id}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"model-manager",
+								"api",
+								"v3",
+								"jobs",
+								"{{job_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Delete Data",
+			"item": [
+				{
+					"name": "001.Delete previously created Dataset",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/data-manager/api/v3/datasets/{{dataset_id}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"data-manager",
+								"api",
+								"v3",
+								"datasets",
+								"{{dataset_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "002.Delete previously created Dataset Schema",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{hostname}}/data-manager/api/v3/datasetSchemas/{{dataset_schema_id}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"path": [
+								"data-manager",
+								"api",
+								"v3",
+								"datasetSchemas",
+								"{{dataset_schema_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
